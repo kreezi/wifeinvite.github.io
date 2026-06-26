@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Приглашение на свидание ❤️</title>
     <style>
-        /* ---------- ОБЩИЕ СТИЛИ ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* ---------- ПАДАЮЩИЕ СЕРДЕЧКИ ---------- */
         .floating-bg {
             position: fixed;
             top: 0;
@@ -61,7 +59,6 @@
             }
         }
 
-        /* ---------- ОСНОВНАЯ КАРТОЧКА ---------- */
         .invitation-card {
             position: relative;
             z-index: 1;
@@ -78,7 +75,6 @@
             border: 1px solid rgba(255, 215, 200, 0.20);
         }
 
-        /* ---------- ДЕКОРАТИВНАЯ ЛЕНТА ---------- */
         .card-ribbon {
             display: flex;
             justify-content: center;
@@ -89,7 +85,6 @@
             opacity: 0.6;
         }
 
-        /* ---------- ЗАГОЛОВОК ---------- */
         .header {
             text-align: center;
             margin-bottom: 24px;
@@ -141,7 +136,6 @@
             display: inline-block;
         }
 
-        /* ---------- ОСНОВНОЕ ПОСЛАНИЕ ---------- */
         .message-block {
             background: rgba(255, 240, 235, 0.35);
             border-radius: 32px;
@@ -182,7 +176,6 @@
             font-style: normal;
         }
 
-        /* ---------- ВЫБОР ДАТЫ И ВРЕМЕНИ ---------- */
         .choice-section {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(4px);
@@ -257,12 +250,16 @@
             padding: 6px;
         }
 
+        .choice-field input::-moz-calendar-picker-indicator {
+            filter: sepia(0.3) hue-rotate(300deg) saturate(0.5);
+            opacity: 0.5;
+        }
+
         .choice-field input::placeholder {
             color: #b09090;
             font-style: italic;
         }
 
-        /* ---------- КНОПКА ---------- */
         .btn-accept {
             width: 100%;
             padding: 18px 24px;
@@ -318,7 +315,12 @@
             transform: translateY(0) scale(0.97);
         }
 
-        /* ---------- ОТВЕТ ПОСЛЕ НАЖАТИЯ ---------- */
+        .btn-accept:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
         .response-box {
             margin-top: 26px;
             padding: 22px 24px;
@@ -374,7 +376,6 @@
             font-style: italic;
         }
 
-        /* ---------- СТАТУС ОТПРАВКИ ---------- */
         .status-message {
             margin-top: 12px;
             padding: 10px 16px;
@@ -401,7 +402,12 @@
             border: 1px solid rgba(200, 80, 80, 0.15);
         }
 
-        /* ---------- ПОДПИСЬ ---------- */
+        .status-message.info {
+            background: rgba(100, 150, 200, 0.10);
+            color: #1a3a5a;
+            border: 1px solid rgba(100, 150, 200, 0.15);
+        }
+
         .footer-note {
             margin-top: 26px;
             text-align: center;
@@ -418,7 +424,6 @@
             animation: pulseHeart 2.6s ease-in-out infinite;
         }
 
-        /* ---------- АДАПТИВ ---------- */
         @media (max-width: 480px) {
             body { padding: 12px; }
             .invitation-card {
@@ -475,13 +480,10 @@
 </head>
 <body>
 
-    <!-- ФОН С ПАДАЮЩИМИ СЕРДЕЧКАМИ -->
     <div class="floating-bg" id="floatingBg"></div>
 
-    <!-- ГЛАВНАЯ КАРТОЧКА -->
     <div class="invitation-card">
 
-        <!-- Декоративная лента -->
         <div class="card-ribbon">
             <span>🌹</span>
             <span>💕</span>
@@ -490,14 +492,12 @@
             <span>🌹</span>
         </div>
 
-        <!-- Заголовок -->
         <div class="header">
             <span class="big-icon">💌</span>
             <h1>Приглашение <span class="accent">на свидание</span></h1>
             <div class="sub-greeting">Для моей любимой жены ❤️</div>
         </div>
 
-        <!-- ПОСЛАНИЕ -->
         <div class="message-block">
             <span class="big-heart">❤️</span>
             Моя дорогая,
@@ -506,24 +506,23 @@
             <br>
             <span class="highlight">Только ты и я.</span>
             <br><br>
-            Пузатик мой, я тебя очень люблю и хочу видеть только тебя в этот день
-            от тебя выбрать дату и время, когда тебе удобно.
+            Я уже забронировал столик в уютном ресторане,
+            приготовил сюрприз и очень хочу увидеть твою улыбку.
             <br><br>
             <span class="big-heart">💖</span>
             <span class="signature">С любовью, твой муж</span>
         </div>
 
-        <!-- ВЫБОР ДАТЫ И ВРЕМЕНИ -->
         <div class="choice-section">
             <div class="choice-title">
                 📅 Выбери, когда тебе удобно
-                <small>Я подстроюсь под любое время, кроме рабочего ) ) ))  ❤️</small>
+                <small>Я подстроюсь под любое время ❤️</small>
             </div>
 
             <div class="choice-row">
                 <div class="choice-field">
                     <span class="icon">🗓️</span>
-                    <input type="date" id="datePicker" value="2026-07-19" />
+                    <input type="date" id="datePicker" />
                 </div>
                 <div class="choice-field">
                     <span class="icon">⏰</span>
@@ -532,15 +531,12 @@
             </div>
         </div>
 
-        <!-- КНОПКА -->
         <button class="btn-accept" id="acceptBtn">
             <span>💝</span> Да, согласна! <span>💝</span>
         </button>
 
-        <!-- СТАТУС ОТПРАВКИ -->
         <div class="status-message" id="statusMessage"></div>
 
-        <!-- ОТВЕТ -->
         <div class="response-box" id="responseBox">
             <span class="big-icon">🥰</span>
             <div class="response-title">Ты сделала меня самым счастливым!</div>
@@ -552,7 +548,6 @@
             </div>
         </div>
 
-        <!-- ПОДПИСЬ -->
         <div class="footer-note">
             <span>🌹</span> С любовью, навсегда твой <span>🌹</span>
         </div>
@@ -561,11 +556,10 @@
     <script>
         (function() {
             // =============================================
-            //  НАСТРОЙКИ TELEGRAM БОТА
-            //  ЗАМЕНИТЕ НА СВОИ ДАННЫЕ!
+            //  ВАШИ ДАННЫЕ ДЛЯ TELEGRAM
             // =============================================
-            const BOT_TOKEN = '8779627598:AAHmCfoFw49rZ_quEKOzQgdT8yfnb-NYQIw';  // Токен бота от @BotFather
-            const CHAT_ID = '7085423217';      // Ваш Chat ID (можно узнать у @userinfobot)
+            const BOT_TOKEN = '8779627598:AAHmCfoFw49rZ_quEKOzQgdT8yfnb-NYQIw';
+            const CHAT_ID = '7085423217';
 
             // =============================================
             //  ГЕНЕРАЦИЯ ФОНА
@@ -596,47 +590,47 @@
             const responseDetails = document.getElementById('responseDetails');
             const statusMessage = document.getElementById('statusMessage');
 
-            // Минимальная дата — сегодня
-            const today = new Date().toISOString().split('T')[0];
-            datePicker.setAttribute('min', today);
-            if (datePicker.value < today) {
-                datePicker.value = today;
+            // Устанавливаем сегодняшнюю дату по умолчанию
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            datePicker.value = `${year}-${month}-${day}`;
+
+            // =============================================
+            //  ФУНКЦИЯ ФОРМАТИРОВАНИЯ ДАТЫ
+            // =============================================
+            function formatDate(dateStr) {
+                if (!dateStr) return 'не выбрана';
+                const parts = dateStr.split('-');
+                const year = parts[0];
+                const month = parseInt(parts[1], 10);
+                const day = parseInt(parts[2], 10);
+                const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+                return day + ' ' + monthNames[month - 1] + ' ' + year;
+            }
+
+            function formatTime(timeStr) {
+                if (!timeStr) return 'не выбрано';
+                return timeStr.slice(0, 5);
             }
 
             // =============================================
-            //  ФУНКЦИЯ ОТПРАВКИ В TELEGRAM
+            //  ОТПРАВКА В TELEGRAM
             // =============================================
-            function sendToTelegram(date, time) {
-                // Форматируем дату красиво
-                const rawDate = date;
-                const rawTime = time;
-                let displayDate = rawDate;
-                let displayTime = rawTime;
+            async function sendToTelegram(date, time) {
+                const displayDate = formatDate(date);
+                const displayTime = formatTime(time);
 
-                if (rawDate) {
-                    const parts = rawDate.split('-');
-                    const year = parts[0];
-                    const month = parseInt(parts[1], 10);
-                    const day = parseInt(parts[2], 10);
-                    const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                                        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-                    displayDate = day + ' ' + monthNames[month - 1] + ' ' + year;
-                }
-
-                if (rawTime) {
-                    displayTime = rawTime.slice(0, 5);
-                }
-
-                // Текст сообщения
                 const message = `💝 НОВОЕ ПРИГЛАШЕНИЕ! 💝\n\n` +
                                `📅 Дата: ${displayDate}\n` +
                                `⏰ Время: ${displayTime}\n\n` +
                                `❤️ Жена согласилась на свидание! ❤️`;
 
-                // Отправляем запрос к Telegram API
                 const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-                return fetch(url, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -646,93 +640,117 @@
                         text: message,
                         parse_mode: 'HTML'
                     })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => {
-                            throw new Error(err.description || 'Ошибка отправки');
-                        });
-                    }
-                    return response.json();
                 });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.description || 'Ошибка отправки');
+                }
+
+                return data;
             }
+
+            // =============================================
+            //  ПРОВЕРКА НАСТРОЕК БОТА (запускается при загрузке)
+            // =============================================
+            async function checkBotSettings() {
+                try {
+                    const url = `https://api.telegram.org/bot${BOT_TOKEN}/getMe`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    if (data.ok) {
+                        statusMessage.textContent = '✅ Бот настроен! Отправьте ссылку жене ❤️';
+                        statusMessage.className = 'status-message show success';
+                    } else {
+                        statusMessage.textContent = '⚠️ Ошибка бота: ' + (data.description || 'неизвестная ошибка');
+                        statusMessage.className = 'status-message show error';
+                    }
+                } catch (error) {
+                    // Если ошибка, значит бот не доступен (но это может быть CORS, поэтому не показываем ошибку)
+                    console.log('Проверка бота пропущена (CORS)');
+                }
+            }
+
+            // Запускаем проверку
+            checkBotSettings();
 
             // =============================================
             //  НАЖАТИЕ КНОПКИ
             // =============================================
-            acceptBtn.addEventListener('click', function(e) {
+            acceptBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
 
-                // Проверяем настройки бота
-                if (BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || CHAT_ID === 'YOUR_CHAT_ID_HERE') {
-                    statusMessage.textContent = '⚠️ Настройте Telegram бота в коде (см. инструкцию ниже)';
-                    statusMessage.className = 'status-message show error';
-                    return;
-                }
-
-                // Показываем статус "Отправка..."
-                statusMessage.textContent = '⏳ Отправка уведомления...';
-                statusMessage.className = 'status-message show';
+                // Блокируем кнопку, чтобы избежать двойного нажатия
+                acceptBtn.disabled = true;
 
                 const date = datePicker.value;
                 const time = timePicker.value;
 
-                // Отправляем в Telegram
-                sendToTelegram(date, time)
-                    .then(() => {
-                        // Успешно!
-                        statusMessage.textContent = '✅ Уведомление отправлено в Telegram!';
-                        statusMessage.className = 'status-message show success';
+                // Проверяем, что дата выбрана
+                if (!date) {
+                    statusMessage.textContent = '⚠️ Пожалуйста, выберите дату';
+                    statusMessage.className = 'status-message show error';
+                    acceptBtn.disabled = false;
+                    return;
+                }
 
-                        // Форматируем дату для отображения
-                        const rawDate = date;
-                        const rawTime = time;
-                        let displayDate = rawDate;
-                        let displayTime = rawTime;
+                // Показываем статус
+                statusMessage.textContent = '⏳ Отправка уведомления...';
+                statusMessage.className = 'status-message show info';
 
-                        if (rawDate) {
-                            const parts = rawDate.split('-');
-                            const year = parts[0];
-                            const month = parseInt(parts[1], 10);
-                            const day = parseInt(parts[2], 10);
-                            const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                                                'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-                            displayDate = day + ' ' + monthNames[month - 1] + ' ' + year;
-                        }
+                try {
+                    // Отправляем в Telegram
+                    await sendToTelegram(date, time);
 
-                        if (rawTime) {
-                            displayTime = rawTime.slice(0, 5);
-                        }
+                    // Успешно!
+                    statusMessage.textContent = '✅ Уведомление отправлено в Telegram!';
+                    statusMessage.className = 'status-message show success';
 
-                        responseDetails.innerHTML = `📅 ${displayDate} · ⏰ ${displayTime}`;
-                        responseBox.classList.add('show');
-                        responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Показываем ответ
+                    const displayDate = formatDate(date);
+                    const displayTime = formatTime(time);
+                    responseDetails.innerHTML = `📅 ${displayDate} · ⏰ ${displayTime}`;
+                    responseBox.classList.add('show');
+                    responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                        if (navigator.vibrate) {
-                            navigator.vibrate(30);
-                        }
+                    if (navigator.vibrate) {
+                        navigator.vibrate(30);
+                    }
 
-                        // Меняем кнопку
-                        acceptBtn.innerHTML = '❤️ Спасибо, любимая! ❤️';
-                        acceptBtn.style.background = 'linear-gradient(135deg, #5a9a5a, #3d7a3d)';
-                        acceptBtn.style.animation = 'none';
+                    // Меняем кнопку
+                    acceptBtn.innerHTML = '❤️ Спасибо, любимая! ❤️';
+                    acceptBtn.style.background = 'linear-gradient(135deg, #5a9a5a, #3d7a3d)';
+                    acceptBtn.style.animation = 'none';
 
-                        setTimeout(() => {
-                            acceptBtn.innerHTML = '✅ Готово!';
-                            acceptBtn.disabled = true;
-                            acceptBtn.style.opacity = '0.7';
-                            acceptBtn.style.cursor = 'default';
-                        }, 3000);
-                    })
-                    .catch((error) => {
-                        // Ошибка
-                        statusMessage.textContent = '❌ Ошибка: ' + error.message;
-                        statusMessage.className = 'status-message show error';
-                        console.error('Ошибка отправки в Telegram:', error);
-                    });
+                    setTimeout(() => {
+                        acceptBtn.innerHTML = '✅ Готово!';
+                        acceptBtn.style.opacity = '0.7';
+                        acceptBtn.style.cursor = 'default';
+                    }, 3000);
+
+                } catch (error) {
+                    // Ошибка
+                    let errorMessage = error.message || 'Неизвестная ошибка';
+
+                    // Понятные сообщения для частых ошибок
+                    if (errorMessage.includes('chat not found')) {
+                        errorMessage = '❌ Chat ID не найден. Убедитесь, что вы начали диалог с ботом (напишите ему /start)';
+                    } else if (errorMessage.includes('bot token')) {
+                        errorMessage = '❌ Неверный токен бота. Проверьте токен в коде';
+                    }
+
+                    statusMessage.textContent = errorMessage;
+                    statusMessage.className = 'status-message show error';
+                    console.error('Ошибка:', error);
+
+                    // Разблокируем кнопку, чтобы можно было попробовать снова
+                    acceptBtn.disabled = false;
+                }
             });
 
-            console.log('❤️ Готовое приглашение для жены с Telegram-уведомлениями!');
+            console.log('❤️ Приглашение готово! Бот настроен на Chat ID:', CHAT_ID);
         })();
     </script>
 </body>
