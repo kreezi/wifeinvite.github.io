@@ -141,7 +141,7 @@
             display: inline-block;
         }
 
-        /* ---------- ОСНОВНОЕ ПОСЛАНИЕ (УЖЕ ГОТОВОЕ) ---------- */
+        /* ---------- ОСНОВНОЕ ПОСЛАНИЕ ---------- */
         .message-block {
             background: rgba(255, 240, 235, 0.35);
             border-radius: 32px;
@@ -374,6 +374,33 @@
             font-style: italic;
         }
 
+        /* ---------- СТАТУС ОТПРАВКИ ---------- */
+        .status-message {
+            margin-top: 12px;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: rgba(100, 200, 120, 0.15);
+            color: #1a5a2a;
+            border: 1px solid rgba(100, 200, 120, 0.2);
+        }
+
+        .status-message.error {
+            background: rgba(200, 80, 80, 0.10);
+            color: #7a2a2a;
+            border: 1px solid rgba(200, 80, 80, 0.15);
+        }
+
         /* ---------- ПОДПИСЬ ---------- */
         .footer-note {
             margin-top: 26px;
@@ -470,7 +497,7 @@
             <div class="sub-greeting">Для моей любимой жены ❤️</div>
         </div>
 
-        <!-- ГОТОВОЕ ПОСЛАНИЕ (ВСЁ УЖЕ НАПИСАНО) -->
+        <!-- ПОСЛАНИЕ -->
         <div class="message-block">
             <span class="big-heart">❤️</span>
             Моя дорогая,
@@ -510,6 +537,9 @@
             <span>💝</span> Да, согласна! <span>💝</span>
         </button>
 
+        <!-- СТАТУС ОТПРАВКИ -->
+        <div class="status-message" id="statusMessage"></div>
+
         <!-- ОТВЕТ -->
         <div class="response-box" id="responseBox">
             <span class="big-icon">🥰</span>
@@ -530,7 +560,16 @@
 
     <script>
         (function() {
-            // ===== ГЕНЕРАЦИЯ ФОНА =====
+            // =============================================
+            //  НАСТРОЙКИ TELEGRAM БОТА
+            //  ЗАМЕНИТЕ НА СВОИ ДАННЫЕ!
+            // =============================================
+            const BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';  // Токен бота от @BotFather
+            const CHAT_ID = 'YOUR_CHAT_ID_HERE';      // Ваш Chat ID (можно узнать у @userinfobot)
+
+            // =============================================
+            //  ГЕНЕРАЦИЯ ФОНА
+            // =============================================
             function createFloatingElements() {
                 const container = document.getElementById('floatingBg');
                 const items = ['❤️', '♥️', '💕', '💖', '🌸', '🌹', '✨', '💗'];
@@ -547,12 +586,15 @@
             }
             createFloatingElements();
 
-            // ===== ЭЛЕМЕНТЫ =====
+            // =============================================
+            //  ЭЛЕМЕНТЫ
+            // =============================================
             const datePicker = document.getElementById('datePicker');
             const timePicker = document.getElementById('timePicker');
             const acceptBtn = document.getElementById('acceptBtn');
             const responseBox = document.getElementById('responseBox');
             const responseDetails = document.getElementById('responseDetails');
+            const statusMessage = document.getElementById('statusMessage');
 
             // Минимальная дата — сегодня
             const today = new Date().toISOString().split('T')[0];
@@ -561,14 +603,13 @@
                 datePicker.value = today;
             }
 
-            // ===== НАЖАТИЕ =====
-            acceptBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Форматируем дату
-                const rawDate = datePicker.value;
-                const rawTime = timePicker.value;
-
+            // =============================================
+            //  ФУНКЦИЯ ОТПРАВКИ В TELEGRAM
+            // =============================================
+            function sendToTelegram(date, time) {
+                // Форматируем дату красиво
+                const rawDate = date;
+                const rawTime = time;
                 let displayDate = rawDate;
                 let displayTime = rawTime;
 
@@ -586,28 +627,112 @@
                     displayTime = rawTime.slice(0, 5);
                 }
 
-                responseDetails.innerHTML = `📅 ${displayDate} · ⏰ ${displayTime}`;
-                responseBox.classList.add('show');
-                responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Текст сообщения
+                const message = `💝 НОВОЕ ПРИГЛАШЕНИЕ! 💝\n\n` +
+                               `📅 Дата: ${displayDate}\n` +
+                               `⏰ Время: ${displayTime}\n\n` +
+                               `❤️ Жена согласилась на свидание! ❤️`;
 
-                if (navigator.vibrate) {
-                    navigator.vibrate(30);
+                // Отправляем запрос к Telegram API
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+                return fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.description || 'Ошибка отправки');
+                        });
+                    }
+                    return response.json();
+                });
+            }
+
+            // =============================================
+            //  НАЖАТИЕ КНОПКИ
+            // =============================================
+            acceptBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Проверяем настройки бота
+                if (BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+                    statusMessage.textContent = '⚠️ Настройте Telegram бота в коде (см. инструкцию ниже)';
+                    statusMessage.className = 'status-message show error';
+                    return;
                 }
 
-                // Меняем кнопку
-                acceptBtn.innerHTML = '❤️ Спасибо, любимая! ❤️';
-                acceptBtn.style.background = 'linear-gradient(135deg, #5a9a5a, #3d7a3d)';
-                acceptBtn.style.animation = 'none';
+                // Показываем статус "Отправка..."
+                statusMessage.textContent = '⏳ Отправка уведомления...';
+                statusMessage.className = 'status-message show';
 
-                setTimeout(() => {
-                    acceptBtn.innerHTML = '✅ Готово!';
-                    acceptBtn.disabled = true;
-                    acceptBtn.style.opacity = '0.7';
-                    acceptBtn.style.cursor = 'default';
-                }, 3000);
+                const date = datePicker.value;
+                const time = timePicker.value;
+
+                // Отправляем в Telegram
+                sendToTelegram(date, time)
+                    .then(() => {
+                        // Успешно!
+                        statusMessage.textContent = '✅ Уведомление отправлено в Telegram!';
+                        statusMessage.className = 'status-message show success';
+
+                        // Форматируем дату для отображения
+                        const rawDate = date;
+                        const rawTime = time;
+                        let displayDate = rawDate;
+                        let displayTime = rawTime;
+
+                        if (rawDate) {
+                            const parts = rawDate.split('-');
+                            const year = parts[0];
+                            const month = parseInt(parts[1], 10);
+                            const day = parseInt(parts[2], 10);
+                            const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                                                'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+                            displayDate = day + ' ' + monthNames[month - 1] + ' ' + year;
+                        }
+
+                        if (rawTime) {
+                            displayTime = rawTime.slice(0, 5);
+                        }
+
+                        responseDetails.innerHTML = `📅 ${displayDate} · ⏰ ${displayTime}`;
+                        responseBox.classList.add('show');
+                        responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        if (navigator.vibrate) {
+                            navigator.vibrate(30);
+                        }
+
+                        // Меняем кнопку
+                        acceptBtn.innerHTML = '❤️ Спасибо, любимая! ❤️';
+                        acceptBtn.style.background = 'linear-gradient(135deg, #5a9a5a, #3d7a3d)';
+                        acceptBtn.style.animation = 'none';
+
+                        setTimeout(() => {
+                            acceptBtn.innerHTML = '✅ Готово!';
+                            acceptBtn.disabled = true;
+                            acceptBtn.style.opacity = '0.7';
+                            acceptBtn.style.cursor = 'default';
+                        }, 3000);
+                    })
+                    .catch((error) => {
+                        // Ошибка
+                        statusMessage.textContent = '❌ Ошибка: ' + error.message;
+                        statusMessage.className = 'status-message show error';
+                        console.error('Ошибка отправки в Telegram:', error);
+                    });
             });
 
-            console.log('❤️ Готовое приглашение для жены загружено!');
+            console.log('❤️ Готовое приглашение для жены с Telegram-уведомлениями!');
         })();
     </script>
 </body>
