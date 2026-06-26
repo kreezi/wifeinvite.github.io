@@ -144,7 +144,7 @@
             border-left: 4px solid #d4737a;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
             font-size: 1.05rem;
-            line-height: 1.8;
+            line-height: 1.9;
             color: #2d1a1a;
             text-align: center;
             font-style: italic;
@@ -168,12 +168,21 @@
             font-style: normal;
         }
 
+        .message-block .compliment {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: #8a4a4a;
+            font-style: italic;
+        }
+
         .message-block .signature {
             display: block;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 0.95rem;
             color: #6a4a4a;
             font-style: normal;
+            font-weight: 600;
         }
 
         .choice-section {
@@ -210,6 +219,7 @@
             gap: 12px;
         }
 
+        /* ===== КЛИКАБЕЛЬНЫЕ ПОЛЯ ===== */
         .choice-field {
             display: flex;
             align-items: center;
@@ -219,6 +229,13 @@
             border-radius: 60px;
             border: 1.5px solid rgba(200, 160, 160, 0.12);
             transition: all 0.25s ease;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .choice-field:hover {
+            border-color: #d4737a;
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .choice-field:focus-within {
@@ -230,6 +247,7 @@
         .choice-field .icon {
             font-size: 1.3rem;
             opacity: 0.7;
+            flex-shrink: 0;
         }
 
         .choice-field input {
@@ -242,17 +260,18 @@
             color: #2d1414;
             outline: none;
             width: 100%;
+            cursor: pointer;
         }
 
         .choice-field input::-webkit-calendar-picker-indicator {
-            filter: sepia(0.3) hue-rotate(300deg) saturate(0.5);
             opacity: 0.5;
             padding: 6px;
+            cursor: pointer;
         }
 
         .choice-field input::-moz-calendar-picker-indicator {
-            filter: sepia(0.3) hue-rotate(300deg) saturate(0.5);
             opacity: 0.5;
+            cursor: pointer;
         }
 
         .choice-field input::placeholder {
@@ -498,22 +517,29 @@
             <div class="sub-greeting">Для моей любимой жены ❤️</div>
         </div>
 
+        <!-- ===== НОВЫЙ ТЕКСТ С КОМПЛИМЕНТАМИ ===== -->
         <div class="message-block">
             <span class="big-heart">❤️</span>
-            Моя дорогая,
+            Мой пузатик,
             <br>
-            Я приглашаю тебя на романтический вечер вдвоём.
-            <br>
+            я тебя очень люблю и хочу провести этот вечер только с тобой.
+            <br><br>
             <span class="highlight">Только ты и я.</span>
             <br><br>
-            Мой пузатик, я тебя очень люблю
-            и хочу провести этот вечер только с тобой.
-            От тебя дата и время! (только не рабочее))
+            Ты — самое прекрасное, что есть в моей жизни.
+            Твоя улыбка согревает меня каждый день,
+            а твои глаза — это звёзды, в которые я хочу смотреть вечно.
             <br><br>
+            <span class="compliment">💫 Ты моя муза, моя радость и моё вдохновение 💫</span>
+            <br><br>
+            <span class="highlight">От тебя дата и время!</span>
+            <span style="font-size: 0.85rem; color: #8a5a5a; display: block; margin-top: 2px;">(только не рабочее 😉)</span>
+            <br>
             <span class="big-heart">💖</span>
             <span class="signature">С любовью, твой муж</span>
         </div>
 
+        <!-- ===== ВЫБОР ДАТЫ И ВРЕМЕНИ (КЛИКАБЕЛЬНЫЙ) ===== -->
         <div class="choice-section">
             <div class="choice-title">
                 📅 Выбери, когда тебе удобно
@@ -521,14 +547,14 @@
             </div>
 
             <div class="choice-row">
-                <div class="choice-field">
+                <label class="choice-field" id="dateLabel">
                     <span class="icon">🗓️</span>
                     <input type="date" id="datePicker" />
-                </div>
-                <div class="choice-field">
+                </label>
+                <label class="choice-field" id="timeLabel">
                     <span class="icon">⏰</span>
                     <input type="time" id="timePicker" value="19:00" />
-                </div>
+                </label>
             </div>
         </div>
 
@@ -545,12 +571,12 @@
                 📅 19 июля 2026 · ⏰ 19:00
             </div>
             <div class="response-note">
-                ❤️ Я уже жду эту встречу. Люблю тебя!
+                ❤️ Я уже жду эту встречу. Люблю тебя бесконечно!
             </div>
         </div>
 
         <div class="footer-note">
-            <span>🌹</span> С любовью, навсегда твой <span>🌹</span>
+            <span>🌹</span> Навсегда твой <span>🌹</span>
         </div>
     </div>
 
@@ -597,6 +623,21 @@
             const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
             datePicker.value = `${year}-${month}-${day}`;
+
+            // =============================================
+            //  КЛИКАБЕЛЬНЫЕ ПОЛЯ ДАТЫ И ВРЕМЕНИ
+            // =============================================
+            document.getElementById('dateLabel').addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    document.getElementById('datePicker').showPicker();
+                }
+            });
+
+            document.getElementById('timeLabel').addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    document.getElementById('timePicker').showPicker();
+                }
+            });
 
             // =============================================
             //  ФУНКЦИЯ ФОРМАТИРОВАНИЯ ДАТЫ
@@ -653,7 +694,7 @@
             }
 
             // =============================================
-            //  ПРОВЕРКА НАСТРОЕК БОТА (запускается при загрузке)
+            //  ПРОВЕРКА НАСТРОЕК БОТА
             // =============================================
             async function checkBotSettings() {
                 try {
@@ -662,19 +703,17 @@
                     const data = await response.json();
 
                     if (data.ok) {
-                        statusMessage.textContent = '✅ Моя жена самая красивая и любимая ❤️';
+                        statusMessage.textContent = 'Моя жена самое лучшее, что у меня есть в жизни! ❤️';
                         statusMessage.className = 'status-message show success';
                     } else {
                         statusMessage.textContent = '⚠️ Ошибка бота: ' + (data.description || 'неизвестная ошибка');
                         statusMessage.className = 'status-message show error';
                     }
                 } catch (error) {
-                    // Если ошибка, значит бот не доступен (но это может быть CORS, поэтому не показываем ошибку)
                     console.log('Проверка бота пропущена (CORS)');
                 }
             }
 
-            // Запускаем проверку
             checkBotSettings();
 
             // =============================================
@@ -683,13 +722,11 @@
             acceptBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
 
-                // Блокируем кнопку, чтобы избежать двойного нажатия
                 acceptBtn.disabled = true;
 
                 const date = datePicker.value;
                 const time = timePicker.value;
 
-                // Проверяем, что дата выбрана
                 if (!date) {
                     statusMessage.textContent = '⚠️ Пожалуйста, выберите дату';
                     statusMessage.className = 'status-message show error';
@@ -697,19 +734,15 @@
                     return;
                 }
 
-                // Показываем статус
                 statusMessage.textContent = '⏳ Отправка уведомления...';
                 statusMessage.className = 'status-message show info';
 
                 try {
-                    // Отправляем в Telegram
                     await sendToTelegram(date, time);
 
-                    // Успешно!
                     statusMessage.textContent = '✅ Уведомление отправлено в Telegram!';
                     statusMessage.className = 'status-message show success';
 
-                    // Показываем ответ
                     const displayDate = formatDate(date);
                     const displayTime = formatTime(time);
                     responseDetails.innerHTML = `📅 ${displayDate} · ⏰ ${displayTime}`;
@@ -720,7 +753,6 @@
                         navigator.vibrate(30);
                     }
 
-                    // Меняем кнопку
                     acceptBtn.innerHTML = '❤️ Спасибо, любимая! ❤️';
                     acceptBtn.style.background = 'linear-gradient(135deg, #5a9a5a, #3d7a3d)';
                     acceptBtn.style.animation = 'none';
@@ -732,26 +764,22 @@
                     }, 3000);
 
                 } catch (error) {
-                    // Ошибка
                     let errorMessage = error.message || 'Неизвестная ошибка';
 
-                    // Понятные сообщения для частых ошибок
                     if (errorMessage.includes('chat not found')) {
-                        errorMessage = '❌ Chat ID не найден. Убедитесь, что вы начали диалог с ботом (напишите ему /start)';
+                        errorMessage = '❌ Напишите боту /start в Telegram, чтобы он мог отправлять вам сообщения';
                     } else if (errorMessage.includes('bot token')) {
-                        errorMessage = '❌ Неверный токен бота. Проверьте токен в коде';
+                        errorMessage = '❌ Неверный токен бота';
                     }
 
                     statusMessage.textContent = errorMessage;
                     statusMessage.className = 'status-message show error';
                     console.error('Ошибка:', error);
-
-                    // Разблокируем кнопку, чтобы можно было попробовать снова
                     acceptBtn.disabled = false;
                 }
             });
 
-            console.log('❤️ Приглашение готово! Бот настроен на Chat ID:', CHAT_ID);
+            console.log('❤️ Приглашение готово! ❤️');
         })();
     </script>
 </body>
