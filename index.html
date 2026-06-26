@@ -219,7 +219,6 @@
             gap: 12px;
         }
 
-        /* ===== КЛИКАБЕЛЬНЫЕ ПОЛЯ ===== */
         .choice-field {
             display: flex;
             align-items: center;
@@ -263,14 +262,15 @@
             cursor: pointer;
         }
 
+        /* Скрываем стандартный индикатор календаря, чтобы не отвлекал */
         .choice-field input::-webkit-calendar-picker-indicator {
-            opacity: 0.5;
+            opacity: 0.3;
             padding: 6px;
             cursor: pointer;
         }
 
         .choice-field input::-moz-calendar-picker-indicator {
-            opacity: 0.5;
+            opacity: 0.3;
             cursor: pointer;
         }
 
@@ -517,7 +517,6 @@
             <div class="sub-greeting">Для моей любимой жены ❤️</div>
         </div>
 
-        <!-- ===== НОВЫЙ ТЕКСТ С КОМПЛИМЕНТАМИ ===== -->
         <div class="message-block">
             <span class="big-heart">❤️</span>
             Мой пузатик,
@@ -533,13 +532,13 @@
             <span class="compliment">💫 Ты моя муза, моя радость и моё вдохновение 💫</span>
             <br><br>
             <span class="highlight">От тебя дата и время!</span>
-            <span style="font-size: 0.85rem; color: #8a5a5a; display: block; margin-top: 2px;">(только не рабочее 😉)</span>
+            <span style="font-size: 0.85rem; color: #8a5a5a; display: block; margin-top: 2px;">(только не рабочее)</span>
             <br>
             <span class="big-heart">💖</span>
             <span class="signature">С любовью, твой муж</span>
         </div>
 
-        <!-- ===== ВЫБОР ДАТЫ И ВРЕМЕНИ (КЛИКАБЕЛЬНЫЙ) ===== -->
+        <!-- ВЫБОР ДАТЫ И ВРЕМЕНИ -->
         <div class="choice-section">
             <div class="choice-title">
                 📅 Выбери, когда тебе удобно
@@ -625,18 +624,26 @@
             datePicker.value = `${year}-${month}-${day}`;
 
             // =============================================
-            //  КЛИКАБЕЛЬНЫЕ ПОЛЯ ДАТЫ И ВРЕМЕНИ
+            //  ОТКРЫТИЕ КАЛЕНДАРЯ ПРИ КЛИКЕ НА ЛЮБУЮ ЧАСТЬ ПОЛЯ
             // =============================================
-            document.getElementById('dateLabel').addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT') {
-                    document.getElementById('datePicker').showPicker();
-                }
+            // При клике на label (включая цифры) — открываем календарь
+            document.querySelectorAll('.choice-field').forEach(function(field) {
+                field.addEventListener('click', function(e) {
+                    const input = this.querySelector('input');
+                    if (input) {
+                        // Если кликнули не по самому input (чтобы не было двойного открытия)
+                        if (e.target.tagName !== 'INPUT') {
+                            input.showPicker();
+                        }
+                    }
+                });
             });
 
-            document.getElementById('timeLabel').addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT') {
-                    document.getElementById('timePicker').showPicker();
-                }
+            // Дополнительно: при клике на сам input тоже открываем
+            document.querySelectorAll('.choice-field input').forEach(function(input) {
+                input.addEventListener('click', function(e) {
+                    this.showPicker();
+                });
             });
 
             // =============================================
@@ -703,7 +710,7 @@
                     const data = await response.json();
 
                     if (data.ok) {
-                        statusMessage.textContent = 'Моя жена самое лучшее, что у меня есть в жизни! ❤️';
+                        statusMessage.textContent = 'КАК ЖЕ Я ТЕБЯ ЛЮБЛЮ ❤️';
                         statusMessage.className = 'status-message show success';
                     } else {
                         statusMessage.textContent = '⚠️ Ошибка бота: ' + (data.description || 'неизвестная ошибка');
