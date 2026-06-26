@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Приглашение на свидание ❤️</title>
+    <style>
+        /* Базовые стили и переменные */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fce4ec 0%, #f8e8e8 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            padding: 32px 24px 40px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Шапка */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header .emoji-big {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #2d1b1b;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subhead {
+            font-size: 1.1rem;
+            color: #5a3e3e;
+            margin-top: 6px;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        /* Карточки шагов */
+        .step-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 200, 200, 0.2);
+            transition: 0.2s;
+        }
+
+        .step-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-label {
+            display: inline-block;
+            background: #ffebee;
+            color: #b71c1c;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 4px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+            margin-bottom: 16px;
+            border: 1px solid #ffcdd2;
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e1e1e;
+            margin-bottom: 6px;
+        }
+
+        .step-card p {
+            color: #4a4a4a;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        /* Поля ввода */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border: 1.5px solid #e0d6d6;
+            font-size: 0.95rem;
+            background: #fcf9f9;
+            transition: 0.2s;
+            font-family: inherit;
+            color: #1e1e1e;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.08);
+            background: white;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .input-group input[type="file"] {
+            padding: 10px 12px;
+            background: white;
+        }
+
+        /* Стиль для выбора вариантов (блюда) */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 12px 0 6px;
+        }
+
+        .option-item {
+            background: #f8f2f2;
+            border-radius: 20px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: 0.15s;
+            cursor: pointer;
+            font-weight: 500;
+            color: #3d2b2b;
+        }
+
+        .option-item:hover {
+            background: #fce8e8;
+            border-color: #f5baba;
+        }
+
+        .option-item.selected {
+            background: #ffebee;
+            border-color: #d32f2f;
+            color: #b71c1c;
+            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.1);
+        }
+
+        .option-item .emoji {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 2px;
+        }
+
+        /* Кнопка */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 8px 24px rgba(211, 47, 47, 0.25);
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.01);
+            box-shadow: 0 12px 32px rgba(211, 47, 47, 0.35);
+            background: linear-gradient(135deg, #c62828, #a31515);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Сообщение после отправки */
+        .result-message {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #e8f5e9;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 500;
+            color: #1e5a2b;
+            border: 1px solid #a5d6a7;
+            display: none;
+        }
+
+        .result-message.show {
+            display: block;
+        }
+
+        .result-message .big-emoji {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Адаптив */
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 18px 30px;
+                border-radius: 32px;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Скрытый элемент для файла */
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .file-name {
+            font-size: 0.8rem;
+            color: #6a4f4f;
+            background: #f3ecec;
+            padding: 4px 12px;
+            border-radius: 30px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+
+        /* Чекбокс "ТГ" */
+        .tg-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 14px 0 4px;
+            font-size: 0.9rem;
+            color: #2d1b1b;
+            cursor: pointer;
+        }
+
+        .tg-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- Шапка -->
+        <div class="header">
+            <span class="emoji-big">💌</span>
+            <h1>Приглашение <span>на свидание</span></h1>
+            <div class="subhead">Для моей любимой жены ❤️</div>
+        </div>
+
+        <!-- Шаг 1: Текст приглашения -->
+        <div class="step-card">
+            <span class="step-label">Шаг 1</span>
+            <h3>✨ Текст приглашения</h3>
+            <p>Напиши что-то тёплое, что она увидит первым.</p>
+            <div class="input-group">
+                <label for="inviteText">Ваше послание</label>
+                <textarea id="inviteText" placeholder="Например: Моя любимая, приглашаю тебя на романтический вечер...">Моя дорогая, хочу пригласить тебя на незабываемый вечер вдвоём. Ты — моё вдохновение ❤️</textarea>
+            </div>
+            <div class="input-group">
+                <label for="imageUpload">Загрузите ваше фото (для фона или атмосферы)</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="imageUpload" accept="image/*">
+                    <span class="file-name" id="fileName">Файл не выбран</span>
+                </div>
+                <div style="font-size:0.75rem; color:#7a5a5a; margin-top:6px;">Поддерживаются JPG, PNG до 7 МБ</div>
+            </div>
+        </div>
+
+        <!-- Шаг 2: Выбор даты и времени -->
+        <div class="step-card">
+            <span class="step-label">Шаг 2</span>
+            <h3>📅 Когда встретимся?</h3>
+            <p>Выбери удобную дату и время.</p>
+            <div class="input-group">
+                <label for="dateSelect">Дата</label>
+                <input type="date" id="dateSelect" value="2026-07-18">
+            </div>
+            <div class="input-group">
+                <label for="timeSelect">Время</label>
+                <input type="time" id="timeSelect" value="19:00">
+            </div>
+        </div>
+
+        <!-- Шаг 3: Выбор блюда / угощения -->
+        <div class="step-card">
+            <span class="step-label">Шаг 3</span>
+            <h3>🍽️ Что закажем?</h3>
+            <p>Пусть выберет то, что ей нравится.</p>
+            <div class="options-grid" id="foodOptions">
+                <div class="option-item" data-value="Стейк с овощами">
+                    <span class="emoji">🥩</span> Стейк
+                </div>
+                <div class="option-item selected" data-value="Паста Карбонара">
+                    <span class="emoji">🍝</span> Паста
+                </div>
+                <div class="option-item" data-value="Роллы и суши">
+                    <span class="emoji">🍣</span> Суши
+                </div>
+                <div class="option-item" data-value="Десерт и чай">
+                    <span class="emoji">🍰</span> Десерт
+                </div>
+            </div>
+            <div class="input-group" style="margin-top: 12px;">
+                <label for="customFood">Или напишите свой вариант</label>
+                <input type="text" id="customFood" placeholder="Например: Пицца с ананасами">
+            </div>
+        </div>
+
+        <!-- Шаг 4: Дополнительно (Telegram) -->
+        <div class="step-card">
+            <span class="step-label">Шаг 4</span>
+            <h3>📲 Получить ответ</h3>
+            <p>Чтобы узнать её выбор, укажите ваш Telegram (или оставьте поле пустым, чтобы увидеть ответ на экране).</p>
+            <div class="input-group">
+                <label for="tgBot">Ваш Telegram username (без @)</label>
+                <input type="text" id="tgBot" placeholder="например: vasya_pupkin">
+            </div>
+            <div class="tg-checkbox">
+                <input type="checkbox" id="tgNotify" checked>
+                <label for="tgNotify">Хочу получить ответ в Telegram-боте</label>
+            </div>
+            <div style="font-size:0.8rem; color:#6a4f4f; margin-top:6px; background:#f5efef; padding:8px 14px; border-radius:30px;">
+                ⚡ После выбора жены, ответ придёт вам в Telegram (если бот настроен).
+            </div>
+        </div>
+
+        <!-- Кнопка отправки (симуляция) -->
+        <button class="btn-primary" id="sendInvite">
+            💝 Отправить приглашение
+        </button>
+
+        <!-- Блок с результатом (симуляция ответа) -->
+        <div class="result-message" id="resultMessage">
+            <span class="big-emoji">✅</span>
+            <strong>Приглашение создано!</strong><br>
+            <span id="resultDetails">Скопируйте ссылку или отправьте этот экран жене.</span>
+            <div style="margin-top:12px; font-size:0.9rem; background:white; padding:12px; border-radius:24px; border:1px dashed #4caf50; word-break:break-all;">
+                <span style="opacity:0.7;">🔗 Ваша ссылка-приглашение:</span><br>
+                <span id="fakeLink">https://ваш-сайт/приглашение-для-жены</span>
+            </div>
+            <div style="margin-top:14px; font-size:0.9rem; background:#fff3e0; padding:10px; border-radius:30px; border:1px solid #ffcc80;">
+                📬 Чтобы получить ответ, настройте Telegram-бота или просто покажите этот экран жене.
+            </div>
+        </div>
+
+        <!-- FAQ (упрощённо) -->
+        <div style="margin-top: 32px; border-top: 1px solid #f0dcdc; padding-top: 20px; font-size:0.9rem; color:#4f3a3a;">
+            <details>
+                <summary style="font-weight:600; cursor:pointer; padding:6px 0;">❓ Как это работает?</summary>
+                <p style="margin-top:10px; line-height:1.5;">Вы настраиваете текст и картинки, а ваша жена (или любой, кто откроет страницу) увидит приглашение. Она сможет выбрать дату, время и блюдо. Если вы укажете Telegram, ответ придёт вам в бота (в демо-версии ответ показывается на экране).</p>
+            </details>
+            <details style="margin-top:10px;">
+                <summary style="font-weight:600; cursor:pointer; padding:6px 0;">📸 Можно загрузить своё фото?</summary>
+                <p style="margin-top:10px; line-height:1.5;">Да, в Шаге 1 есть загрузка изображений. В демо-версии оно используется для предпросмотра. В реальном проекте вы можете вставить его как фон или внутрь приглашения.</p>
+            </details>
+            <details style="margin-top:10px;">
+                <summary style="font-weight:600; cursor:pointer; padding:6px 0;">🤖 Нужна регистрация?</summary>
+                <p style="margin-top:10px; line-height:1.5;">Нет, всё работает прямо в браузере. Это демонстрационная версия.</p>
+            </details>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ----- Элементы -----
+            const foodOptions = document.querySelectorAll('.option-item');
+            const customFoodInput = document.getElementById('customFood');
+            const dateInput = document.getElementById('dateSelect');
+            const timeInput = document.getElementById('timeSelect');
+            const inviteText = document.getElementById('inviteText');
+            const fileInput = document.getElementById('imageUpload');
+            const fileNameSpan = document.getElementById('fileName');
+            const tgBotInput = document.getElementById('tgBot');
+            const tgNotifyCheck = document.getElementById('tgNotify');
+            const sendBtn = document.getElementById('sendInvite');
+            const resultDiv = document.getElementById('resultMessage');
+            const resultDetails = document.getElementById('resultDetails');
+            const fakeLinkSpan = document.getElementById('fakeLink');
+
+            // ----- Логика выбора блюда -----
+            let selectedFood = 'Паста Карбонара'; // по умолчанию
+
+            function updateSelectedFood(value) {
+                selectedFood = value;
+                // Снимаем выделение со всех
+                foodOptions.forEach(opt => opt.classList.remove('selected'));
+                // Ищем и выделяем соответствующий option
+                let found = false;
+                foodOptions.forEach(opt => {
+                    if (opt.dataset.value === value) {
+                        opt.classList.add('selected');
+                        found = true;
+                    }
+                });
+                // Если выбрано кастомное значение, снимаем выделение со всех, кроме если совпало
+                if (!found) {
+                    // Если кастомное значение не совпадает ни с одним option
+                    foodOptions.forEach(opt => opt.classList.remove('selected'));
+                }
+                // Очищаем кастомное поле, если выбрано стандартное
+                if (found) {
+                    customFoodInput.value = '';
+                }
+            }
+
+            // Клик по варианту
+            foodOptions.forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const value = this.dataset.value;
+                    updateSelectedFood(value);
+                });
+            });
+
+            // Ввод кастомного блюда
+            customFoodInput.addEventListener('input', function() {
+                const val = this.value.trim();
+                if (val !== '') {
+                    // Снимаем выделение со стандартных
+                    foodOptions.forEach(opt => opt.classList.remove('selected'));
+                    selectedFood = val;
+                } else {
+                    // Если поле пустое, возвращаем выделение на первый выбранный (или стандартный)
+                    const firstSelected = document.querySelector('.option-item.selected');
+                    if (firstSelected) {
+                        selectedFood = firstSelected.dataset.value;
+                    } else {
+                        // Если ничего не выбрано, выбираем первый
+                        if (foodOptions.length) {
+                            foodOptions[0].classList.add('selected');
+                            selectedFood = foodOptions[0].dataset.value;
+                        }
+                    }
+                }
+            });
+
+            // Если кастомное поле не пусто при загрузке — синхронизируем
+            if (customFoodInput.value.trim() !== '') {
+                selectedFood = customFoodInput.value.trim();
+                foodOptions.forEach(opt => opt.classList.remove('selected'));
+            }
+
+            // ----- Загрузка файла (имя) -----
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    fileNameSpan.textContent = this.files[0].name;
+                } else {
+                    fileNameSpan.textContent = 'Файл не выбран';
+                }
+            });
+
+            // ----- Отправка (симуляция) -----
+            sendBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Собираем данные
+                const text = inviteText.value.trim() || 'Приглашение на свидание';
+                const date = dateInput.value || '2026-07-18';
+                const time = timeInput.value || '19:00';
+                // Выбранное блюдо: если кастом не пуст, берём его, иначе selectedFood
+                let food = selectedFood;
+                if (customFoodInput.value.trim() !== '') {
+                    food = customFoodInput.value.trim();
+                }
+                const tgUsername = tgBotInput.value.trim();
+                const wantTg = tgNotifyCheck.checked;
+
+                // Формируем результат
+                let details = `📅 ${date} в ${time}\n🍽️ Блюдо: ${food}`;
+                if (text) details = `💬 "${text}"\n` + details;
+
+                // Показываем результат
+                resultDetails.innerHTML = details.replace(/\n/g, '<br>');
+                resultDiv.classList.add('show');
+
+                // Дополнительно про Telegram
+                if (wantTg && tgUsername) {
+                    const tgMsg = `✅ Ответ будет отправлен в Telegram @${tgUsername} (в демо-режиме ответ здесь).`;
+                    resultDetails.innerHTML += `<br><br>🤖 ${tgMsg}`;
+                } else if (wantTg && !tgUsername) {
+                    resultDetails.innerHTML += `<br><br>⚠️ Укажите username, чтобы получить ответ в Telegram.`;
+                } else {
+                    resultDetails.innerHTML += `<br><br>📬 Ответ можно увидеть на этом экране.`;
+                }
+
+                // Прокручиваем к результату
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Можно также сгенерировать ссылку (фейк)
+                const fakeLink = `https://onlyteplo.ru/meeting/${Date.now().toString(36)}`;
+                fakeLinkSpan.textContent = fakeLink;
+
+                // Бонус: показать уведомление
+                if (window.innerWidth < 600) {
+                    // Для мобильных
+                }
+            });
+
+            // Инициализация: при загрузке проверить выделение
+            const defaultSelected = document.querySelector('.option-item.selected');
+            if (defaultSelected) {
+                selectedFood = defaultSelected.dataset.value;
+            } else if (foodOptions.length) {
+                foodOptions[0].classList.add('selected');
+                selectedFood = foodOptions[0].dataset.value;
+            }
+
+            // Синхронизация, если кастомное поле не пусто
+            if (customFoodInput.value.trim() !== '') {
+                selectedFood = customFoodInput.value.trim();
+                foodOptions.forEach(opt => opt.classList.remove('selected'));
+            }
+
+            // ----- Дополнительно: сброс выделения при очистке кастомного поля -----
+            // уже реализовано выше
+
+            console.log('❤️ Приглашение для жены готово!');
+        })();
+    </script>
+
+</body>
+</html>
